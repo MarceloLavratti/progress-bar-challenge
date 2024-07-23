@@ -48,16 +48,17 @@ function App() {
   const [isMaritalStatusValid, setIsMaritalStatusValid] = useState(false)
   const [isGenderValid, setIsGenderValid] = useState(false)
   const [progressBar, setProgressBar] = useState(0)
+  const [btnEnable, setBtnEnable] = useState(false)
 
   const twoNames = /\w+\s+\w+/
   const isEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
   const handleNameInput = (e) => {
+    setName(e.target.value)
     if (twoNames.test(e.target.value)) {
       if (!isNameValid) {
         setIsNameValid(true)
         handleSumProgressBar()
-        setName(e.target.value)
       }
     } else if (isNameValid) {
       setIsNameValid(false)
@@ -66,11 +67,11 @@ function App() {
   }
 
   const handleEmailInput = (e) => {
+    setEmail(e.target.value)
     if (isEmail.test(e.target.value)) {
       if (!isEmailValid) {
         setIsEmailValid(true)
         handleSumProgressBar()
-        setEmail(e.target.value)
       }
     } else if (isEmailValid) {
       setIsEmailValid(false)
@@ -109,13 +110,26 @@ function App() {
     setProgressBar((prev) => Math.max(prev - 25, 0))
   }
 
+  const handleBtnLogin = () => {
+    alert('Login realizado com sucesso!')
+    setName('')
+    setEmail('')
+    setMaritalStatus('')
+    setGender('')
+    setProgressBar(0)
+    setIsNameValid(false)
+    setIsEmailValid(false)
+    setIsMaritalStatusValid(false)
+    setIsGenderValid(false)
+  }
+
   useEffect(() => {
-    console.log('name: ' + name)
-    console.log('email: ' + email)
-    console.log('maritalstatus: ' + maritalStatus)
-    console.log('gender: ' + gender)
-    console.log('progressbar' + progressBar)
-  }, [name, email, maritalStatus, gender, progressBar])
+    if(progressBar === 100){
+      setBtnEnable(true)
+    } else {
+      setBtnEnable(false)
+    }
+  }, [progressBar])
 
   return (
     <div className='App'>
@@ -128,15 +142,15 @@ function App() {
         </div>
         <div className='form-group'>
           <label htmlFor=''>Nome Completo</label>
-          <input onChange={handleNameInput} />
+          <input value={name} onChange={handleNameInput} />
         </div>
         <div className='form-group'>
           <label htmlFor=''>E-mail</label>
-          <input onChange={handleEmailInput} />
+          <input value={email} onChange={handleEmailInput} />
         </div>
         <div className='form-group'>
           <label htmlFor=''>Estado Civil</label>
-          <select onChange={handleSelect}>
+          <select value={maritalStatus} onChange={handleSelect}>
             <option value=''>- selecione...</option>
             <option value='solteiro'>Solteiro</option>
             <option value='casado'>Casado</option>
@@ -164,7 +178,7 @@ function App() {
             </span>
           </div>
         </div>
-        <button>Enviar Formulário</button>
+        <button disabled={!btnEnable} onClick={handleBtnLogin}>Enviar Formulário</button>
       </main>
     </div>
   );
