@@ -111,7 +111,7 @@ function App() {
   }
 
   const handleBtnLogin = () => {
-    alert('Login realizado com sucesso!')
+    alert('Formulário enviado com sucesso!')
     setName('')
     setEmail('')
     setMaritalStatus('')
